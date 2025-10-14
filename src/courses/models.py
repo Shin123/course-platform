@@ -1,4 +1,8 @@
 from django.db import models
+import helpers
+from cloudinary.models import CloudinaryField
+
+helpers.cloudinary_init()
 
 
 class AccessRequirement(models.TextChoices):
@@ -19,7 +23,8 @@ def handle_upload(instance, filename):
 class Course(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
-    image = models.ImageField(upload_to=handle_upload, blank=True, null=True)
+    # image = models.ImageField(upload_to=handle_upload, blank=True, null=True)
+    image = CloudinaryField("image", blank=True, null=True)
     access = models.CharField(
         max_length=5,
         choices=AccessRequirement.choices,
@@ -32,3 +37,37 @@ class Course(models.Model):
     @property
     def is_published(self):
         return self.status == PublishStatus.PUBLISHED
+
+    @property
+    def image_admin_url(self):
+        if not self.image:
+            return ""
+        image_option = {"width": 200}
+        url = self.image.build_url(**image_option)
+        return url
+
+    @property
+    def get_image_thumbnail(self, as_html=False, width=500):
+        if not self.image:
+            return ""
+        image_option = {"width": width}
+        if as_html:
+            return self.image.image(**image_option)
+        url = self.image.build_url(**image_option)
+        return url
+
+    @property
+    def get_image_detail(self, as_html=False, width=750):
+        if not self.image:
+            return ""
+        image_option = {"width": width}
+        if as_html:
+            return self.image.image(**image_option)
+        url = self.image.build_url(**image_option)
+        return url
+
+
+class Lesson(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
