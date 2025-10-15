@@ -53,10 +53,13 @@ def get_cloudinary_video_object(
     if height and width:
         video_option["crop"] = "limit"
     url = video_object.build_url(**video_option)
+    print("url", url)
     if as_html:
         template_name = "videos/snippets/embed.html"
         tmpl = get_template(template_name)
         cloud_name = settings.CLOUDINARY_CLOUD_NAME
-        _html = tmpl.render({"video_url": url, "cloud_name": cloud_name})
+        _html = tmpl.render(
+            {"video_url": url, "cloud_name": cloud_name, "base_color": "#00aabc"}
+        )
         return _html
     return url
