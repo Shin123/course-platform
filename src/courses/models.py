@@ -127,6 +127,7 @@ class Lesson(models.Model):
         "video",
         blank=True,
         null=True,
+        type="private",
         resource_type="video",
         public_id_prefix=get_public_id_prefix,
         display_name=get_display_name,
