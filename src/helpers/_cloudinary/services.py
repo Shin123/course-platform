@@ -1,3 +1,7 @@
+from django.conf import settings
+from django.template.loader import get_template
+
+
 def get_cloudinary_image_object(instance, field_name="image", as_html=False, width=200):
     if not hasattr(instance, field_name):
         return None
@@ -50,5 +54,9 @@ def get_cloudinary_video_object(
         video_option["crop"] = "limit"
     url = video_object.build_url(**video_option)
     if as_html:
-        return video_html.format(video_url=url)
+        template_name = "videos/snippets/embed.html"
+        tmpl = get_template(template_name)
+        cloud_name = settings.CLOUDINARY_CLOUD_NAME
+        _html = tmpl.render({"video_url": url, "cloud_name": cloud_name})
+        return _html
     return url
