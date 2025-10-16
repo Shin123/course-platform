@@ -1,17 +1,6 @@
-<link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/cloudinary-video-player@3.4.2/dist/cld-video-player.min.css"
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer"
-/>
-<script
-  src="https://cdn.jsdelivr.net/npm/cloudinary-video-player@3.4.2/dist/cld-video-player.min.js"
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer"
-></script>
-
 <video
   id="demo-player"
+  class="sfe-video"
   controls
   autoplay
   data-video-url="{{ video_url }}"
@@ -19,16 +8,3 @@
   data-cld-colors='{ "base": "{% if base_color %}{{ base_color }} {% else %} #00aabc {% endif %}", "accent": "#db8226", "text": "#fff" }'
   class="cld-video-player cld-video-player-skin-light"
 ></video>
-
-<script>
-  const videoPlayerId = 'demo-player'
-  const videoPlayerElement = document.getElementById(videoPlayerId)
-  if (videoPlayerElement) {
-    const cloudName = videoPlayerElement.dataset.cloudName
-    const videoUrl = videoPlayerElement.dataset.videoUrl
-    const cld = cloudinary.videoPlayer(videoPlayerElement, {
-      cloud_name: cloudName,
-    })
-    cld.source(videoUrl)
-  }
-</script>
