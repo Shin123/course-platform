@@ -15,13 +15,6 @@ def get_cloudinary_image_object(instance, field_name="image", as_html=False, wid
     return url
 
 
-video_html = """
-<video controls autoplay>
-<source src="{video_url}" />
-</video>
-"""
-
-
 def get_cloudinary_video_object(
     instance,
     field_name="video",
@@ -53,7 +46,6 @@ def get_cloudinary_video_object(
     if height and width:
         video_option["crop"] = "limit"
     url = video_object.build_url(**video_option)
-    print("url", url)
     if as_html:
         template_name = "videos/snippets/embed.html"
         tmpl = get_template(template_name)
