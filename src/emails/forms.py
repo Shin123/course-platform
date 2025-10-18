@@ -13,7 +13,7 @@ class EmailForm(forms.Form):
                 "class": css.EMAIL_FIELD_CSS,
                 "placeholder": "Enter your email",
             }
-        )
+        ),
     )
 
     # class Meta:
