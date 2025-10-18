@@ -1,3 +1,5 @@
+ {% load django_htmx %}
+
 <link
   rel="stylesheet"
   href="https://cdn.jsdelivr.net/npm/cloudinary-video-player@3.4.2/dist/cld-video-player.min.css"
@@ -10,16 +12,25 @@
   referrerpolicy="no-referrer"
 ></script>
 
+<script
+  src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.7/dist/htmx.min.js"
+  integrity="sha384-ZBXiYtYQ6hJ2Y0ZNoYuI+Nq5MqWBr+chMrS/RkXpNzQCApHEhOt2aY8EJgqwHLkJ"
+  crossorigin="anonymous"
+></script>
+
+ {% htmx_script %}
+
 <script defer>
   function renderVideoElement(videoPlayerElement) {
-    const currentVideoId =videoPlayerElement.getAttribute('id')
-    const videoPlayerId = `${currentVideoId}` + '-sfe-' + Math.random().toString(36).substr(2,9)
+    const currentVideoId = videoPlayerElement.getAttribute('id')
+    const videoPlayerId =
+      `${currentVideoId}` + '-sfe-' + Math.random().toString(36).substr(2, 9)
     videoPlayerElement.setAttribute('id', videoPlayerId)
     const cloudName = videoPlayerElement.dataset.cloudName
     const videoUrl = videoPlayerElement.dataset.videoUrl
     if (cloudName && videoUrl) {
       const cld = cloudinary.videoPlayer(videoPlayerId, {
-        cloudName: cloudName
+        cloudName: cloudName,
       })
       cld.source(videoUrl)
     }
@@ -27,7 +38,8 @@
 
   function renderAllVideo() {
     const videoPlayerClassName = 'sfe-video'
-    const videoPlayerElements = document.getElementsByClassName(videoPlayerClassName)
+    const videoPlayerElements =
+      document.getElementsByClassName(videoPlayerClassName)
     for (let el of videoPlayerElements) {
       renderVideoElement(el)
     }

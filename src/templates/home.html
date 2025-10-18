@@ -2,11 +2,7 @@
   Hello world from Course Platform
 {% endblock %} {% block content %}
   <h1>Hello world</h1>
-  <div>
-    <form method="POST" action=".">
-      {% csrf_token %}
-      {{form}}
-      <button type="submit">Login</button>
-    </form>
+  <div hx-get='/hx/login/' hx-trigger='load'>
+    
   </div>
 {% endblock %}
