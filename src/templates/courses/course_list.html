@@ -1,19 +1,57 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
 
-<section class="bg-white dark:bg-gray-900">
-  <div class="">
-    <div class="mx-auto max-w-screen-sm text-center lg:mb-16 mb-8">
-      <h2
-        class="mb-4 text-3xl lg:text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
-      >
-        Our Course
-      </h2>
-      <p class="font-light text-gray-500 sm:text-xl dark:text-gray-400">
-        We are awesome courses
+{% block head_title %}
+  Explore Courses | Course Platform
+{% endblock %}
+
+{% block content %}
+  <section class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-16 px-6 shadow-sm dark:from-gray-900 dark:via-gray-900 dark:to-slate-900 lg:px-16">
+    <div class="mx-auto max-w-4xl text-center">
+      <span class="inline-flex items-center space-x-2 rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-700 dark:bg-blue-900/40 dark:text-blue-200">
+        <span class="inline-flex h-2 w-2 rounded-full bg-blue-500"></span>
+        <span>Project based learning tracks</span>
+      </span>
+      <h1 class="mt-6 text-4xl font-extrabold tracking-tight text-gray-900 md:text-5xl dark:text-white">
+        Discover courses built for ambitious builders.
+      </h1>
+      <p class="mt-6 text-lg text-gray-600 dark:text-gray-300">
+        Curated learning paths with mentor feedback, production ready projects, and a community that helps you ship with confidence.
       </p>
+      <div class="mt-10 flex flex-wrap justify-center gap-3">
+        <a href="{% url 'home' %}" class="inline-flex items-center justify-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 transition hover:border-gray-400 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:text-gray-200 dark:hover:border-gray-500">Back to home</a>
+        <span class="inline-flex items-center rounded-full bg-white/60 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm backdrop-blur dark:bg-gray-800/60 dark:text-gray-300">
+          {{ object_list|length }} learning paths available
+        </span>
+      </div>
     </div>
-    {% include 'courses/snippets/list-display.html' with queryset=object_list%}
-  </div>
-</section>
+  </section>
 
+  <section class="py-20">
+    <div class="mx-auto max-w-6xl px-4">
+      <div class="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">Choose your focus area</h2>
+          <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+            Each course blends live guidance, async feedback, and portfolio grade work so you can level up fast.
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-3 text-sm">
+          <span class="inline-flex items-center rounded-full border border-gray-200 px-4 py-2 text-gray-600 dark:border-gray-700 dark:text-gray-300">All tracks</span>
+          <span class="inline-flex items-center rounded-full border border-transparent bg-blue-600 px-4 py-2 font-semibold text-white">Popular</span>
+          <span class="inline-flex items-center rounded-full border border-gray-200 px-4 py-2 text-gray-600 dark:border-gray-700 dark:text-gray-300">Beginner friendly</span>
+          <span class="inline-flex items-center rounded-full border border-gray-200 px-4 py-2 text-gray-600 dark:border-gray-700 dark:text-gray-300">Advanced</span>
+        </div>
+      </div>
+
+      <div class="mt-16">
+        {% if object_list %}
+          {% include 'courses/snippets/list-display.html' with queryset=object_list %}
+        {% else %}
+          <div class="rounded-3xl border border-dashed border-gray-300 bg-white/60 p-12 text-center text-gray-600 shadow-sm dark:border-gray-700 dark:bg-gray-800/60 dark:text-gray-300">
+            We are launching our first cohorts soon. Join the waitlist on the home page to be notified the moment new courses drop.
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
 {% endblock %}
