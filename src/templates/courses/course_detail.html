@@ -1,41 +1,129 @@
 {% extends 'base.html' %}
 
+{% block head_title %}
+  {{ object.title }} | Course Platform
+{% endblock %}
+
 {% block content %}
-
-<section class="bg-white dark:bg-gray-900">
-  <div class="py-8 lg:py-16 space-y-8 lg:space-y-16">
-    <div class="mx-auto max-w-screen-sm text-center lg:mb-16 mb-8">
-      <h2
-        class="mb-4 text-3xl lg:text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
-      >
-        {{ object.title}}
-      </h2>
-    </div>
-
-    <div class="flex justify-center items-center">
-        <img src="{{ object.get_display_image }}" width="750"/>
-    </div>
-    <div class="flex justify-center items-center text-white">
-        <div class="max-lg-w">
+  <section class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-16 px-6 shadow-sm dark:from-gray-900 dark:via-gray-900 dark:to-slate-900 lg:px-16">
+    <div class="mx-auto max-w-6xl">
+      <a href="{% url 'courses:list' %}" class="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-300 dark:hover:text-blue-200">
+        <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+        </svg>
+        Back to courses
+      </a>
+      <div class="mt-10 grid gap-12 lg:grid-cols-[2fr,1fr] lg:items-start">
+        <div>
+          <h1 class="text-4xl font-extrabold tracking-tight text-gray-900 md:text-5xl dark:text-white">
+            {{ object.title }}
+          </h1>
+          <div class="mt-6 flex flex-wrap gap-3 text-sm">
+            <span class="inline-flex items-center rounded-full bg-blue-600 px-4 py-2 font-semibold text-white">
+              {{ object.get_status_display }}
+            </span>
+            <span class="inline-flex items-center rounded-full bg-white/70 px-4 py-2 text-gray-700 shadow-sm backdrop-blur dark:bg-gray-800/80 dark:text-gray-200">
+              Access: {{ object.get_access_display }}
+            </span>
+            <span class="inline-flex items-center rounded-full bg-white/70 px-4 py-2 text-gray-700 shadow-sm backdrop-blur dark:bg-gray-800/80 dark:text-gray-200">
+              Lessons: {{ lessons_queryset|length }}
+            </span>
+          </div>
+          <div class="mt-8 space-y-6 text-lg text-gray-700 dark:text-gray-300">
             {{ object.description|linebreaks }}
+          </div>
+          <div class="mt-10 flex flex-wrap gap-4">
+            <a href="#lessons" class="inline-flex items-center justify-center rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/40 transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              View lesson plan
+            </a>
+            <a href="{% url 'home' %}#newsletter" class="inline-flex items-center justify-center rounded-lg border border-gray-300 px-6 py-3 text-sm font-semibold text-gray-700 transition hover:border-gray-400 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:text-gray-200 dark:hover:border-gray-500">
+              Join the waitlist
+            </a>
+          </div>
         </div>
+        {% if object.get_display_image %}
+          <div class="relative overflow-hidden rounded-3xl border border-gray-200 bg-white/70 p-4 shadow-lg backdrop-blur dark:border-gray-700 dark:bg-gray-800/70">
+            <img src="{{ object.get_display_image }}" alt="{{ object.title }} cover art" class="h-full w-full rounded-2xl object-cover" />
+          </div>
+        {% endif %}
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="bg-white dark:bg-gray-900">
-  <div class="">
-    <div class="mx-auto max-w-screen-sm text-center lg:mb-16 mb-8">
-      <h2
-        class="mb-4 text-lg lg:text-xl tracking-tight font-extrabold text-gray-900 dark:text-white"
-      >
-        Lessons
-      </h2>
-      
+  <section class="py-20">
+    <div class="mx-auto max-w-6xl px-4">
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h2 id="lessons" class="text-3xl font-bold text-gray-900 dark:text-white">Lesson plan</h2>
+          <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+            Work through each module with mentor feedback, peer reviews, and clear deliverables.
+          </p>
+        </div>
+        <div class="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+          <span class="inline-flex h-3 w-3 rounded-full bg-green-500"></span> Published
+          <span class="inline-flex h-3 w-3 rounded-full bg-amber-500"></span> Coming soon
+          <span class="inline-flex h-3 w-3 rounded-full bg-blue-500"></span> Preview available
+        </div>
+      </div>
+
+      <div class="mt-12 space-y-4">
+        {% if lessons_queryset %}
+          <ol class="space-y-4">
+            {% for lesson in lessons_queryset %}
+              <li class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
+                <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                  <div class="flex items-start gap-4">
+                    <span class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-base font-semibold text-blue-700 dark:bg-blue-900/40 dark:text-blue-200">
+                      {{ forloop.counter }}
+                    </span>
+                    <div>
+                      <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                        {{ lesson.title }}
+                      </h3>
+                      {% if lesson.description %}
+                        <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                          {{ lesson.description|truncatechars:160 }}
+                        </p>
+                      {% endif %}
+                      <div class="mt-3 flex flex-wrap gap-2 text-xs">
+                        {% if not lesson.is_coming_soon %}
+                          <span class="inline-flex items-center rounded-full bg-green-100 px-3 py-1 font-medium text-green-700 dark:bg-green-900/40 dark:text-green-200">
+                            Published
+                          </span>
+                        {% else %}
+                          <span class="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 font-medium text-amber-700 dark:bg-amber-900/40 dark:text-amber-200">
+                            Coming soon
+                          </span>
+                        {% endif %}
+                        {% if lesson.can_preview %}
+                          <span class="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 font-medium text-blue-700 dark:bg-blue-900/40 dark:text-blue-200">
+                            Preview available
+                          </span>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex flex-col items-start gap-3 md:items-end">
+                    <a href="{{ lesson.get_absolute_url }}" class="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-300 dark:hover:text-blue-200">
+                      View lesson
+                      <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                      </svg>
+                    </a>
+                    {% if lesson.get_thumbnail %}
+                      <img src="{{ lesson.get_thumbnail }}" alt="{{ lesson.title }} thumbnail" class="h-20 w-32 rounded-xl object-cover" />
+                    {% endif %}
+                  </div>
+                </div>
+              </li>
+            {% endfor %}
+          </ol>
+        {% else %}
+          <div class="rounded-3xl border border-dashed border-gray-300 bg-white/60 p-12 text-center text-gray-600 shadow-sm dark:border-gray-700 dark:bg-gray-800/60 dark:text-gray-300">
+            Lesson plan is in progress. Check back soon or join the waitlist for launch updates.
+          </div>
+        {% endif %}
+      </div>
     </div>
-   {% include 'courses/snippets/list-display.html' with queryset=lessons_queryset%}
-  </div>
-</section>
-
-
+  </section>
 {% endblock %}
