@@ -48,7 +48,7 @@ def lesson_detail_view(request, course_id, lesson_id, *args, **kwargs):
         """
         template_name = "courses/lesson_detail.html"
         lesson_embed_html = helpers.get_cloudinary_video_object(
-            lesson_obj, field_name="video", as_html=True, width=550
+            lesson_obj, field_name="video", as_html=True, width=550, autoplay=False
         )
         context["video_embed"] = lesson_embed_html
 
