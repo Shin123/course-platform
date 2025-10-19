@@ -10,15 +10,36 @@
         Hello world from Course Platform
         {% endblock head_title %}
     </title>
+     {% comment %} <script>
+      const preferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const saved = localStorage.getItem('theme'); // 'dark' | 'light' | null
+      document.documentElement.classList.toggle(
+        'dark',
+        saved ? saved === 'dark' : preferDark
+      );
+    </script> {% endcomment %}
+    <script>
+    // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+      if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+      } else {
+          document.documentElement.classList.remove('dark')
+      }
+    </script>
+
   </head>
-  <body hx-headers='{"x-csrftoken":"{{ csrf_token }}"}'>
+  <body hx-headers='{"x-csrftoken":"{{ csrf_token }}"}' class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen flex flex-col">
     {% include 'base/navbar.html' %}
+    <div class='{% if "/logout" in request.path or "/login" in request.path %} {% else %}px-4 mx-auto max-w-screen-xl  {% endif %}'>
     {% block content %}
     <h1 class="text-3xl font-bold underline">
       Hello world! from base
     </h1>
     {% endblock content %}
+    <div>
      {% include "base/js.html" %}
-
+     
+     
+     
   </body>
 </html>

@@ -1,6 +1,7 @@
+from django.http import Http404
+from django.shortcuts import render
+
 import helpers
-from django.http import Http404, JsonResponse
-from django.shortcuts import render, redirect
 
 from . import services
 
@@ -32,10 +33,11 @@ def lesson_detail_view(request, course_id, lesson_id, *args, **kwargs):
 
     email_id_exists = request.session.get("email_id")
     print(email_id_exists, "email_id_exists")
+    print(lesson_obj.requires_email, "lesson_obj.requires_email")
     if lesson_obj.requires_email and not email_id_exists:
         print(request.path)
         request.session["next_url"] = request.path
-        return render(request, "courses/email-required.html")
+        return render(request, "courses/email-required.html", {})
 
     template_name = "courses/lesson-coming-soon.html"
     context = {"object": lesson_obj}
@@ -46,7 +48,7 @@ def lesson_detail_view(request, course_id, lesson_id, *args, **kwargs):
         """
         template_name = "courses/lesson_detail.html"
         lesson_embed_html = helpers.get_cloudinary_video_object(
-            lesson_obj, field_name="video", as_html=False, width=550
+            lesson_obj, field_name="video", as_html=True, width=550
         )
         context["video_embed"] = lesson_embed_html
 
