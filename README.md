@@ -1,5 +1,7 @@
 # Building a Course Platform
 
+Build a Course Platform with Django, HTMX, TailwindCSS and Cloudinary.
+
 ## Overview
 
 - Courses:
