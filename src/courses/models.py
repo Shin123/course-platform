@@ -105,12 +105,12 @@ class Course(models.Model):
         if not self.image:
             return None
         return helpers.get_cloudinary_image_object(
-            self, field_name="image", as_html=False, width=382, height=382
+            self, field_name="image", as_html=False, width=220, height=115
         )
 
     def get_display_image(self):
         return helpers.get_cloudinary_image_object(
-            self, field_name="image", as_html=False, width=200
+            self, field_name="image", as_html=False, width=832, height=437
         )
 
     @property
